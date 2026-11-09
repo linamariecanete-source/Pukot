@@ -139,7 +139,7 @@ function DetailDrawer({ order, onClose, onUpdateStatus, onUpdatePayment, busyId 
 
   if (!order) return null;
 
-  const cart = Array.isArray(order.cart) ? order.cart : [];
+  // ✅ FIXED: Removed unused 'cart' variable (ESLint no-unused-vars error)
   const busy = busyId === order.id;
   const days = daysUntil(order.reservation_date);
 
@@ -226,11 +226,11 @@ function DetailDrawer({ order, onClose, onUpdateStatus, onUpdatePayment, busyId 
           {/* Items */}
           <div style={drawer.section}>
             <div style={drawer.sectionLabel}>Ordered Items</div>
-            {cart.length === 0 ? (
+            {!Array.isArray(order.cart) || order.cart.length === 0 ? (
               <div style={drawer.empty}>No items in this catering order.</div>
             ) : (
               <div style={drawer.itemsTable}>
-                {cart.map((it, i) => (
+                {order.cart.map((it, i) => (
                   <div key={i} style={drawer.itemRow}>
                     <span style={drawer.itemName}>{it.qty} × {it.name}</span>
                     <span style={drawer.itemPrice}>{formatCurrency(it.qty * it.price)}</span>
