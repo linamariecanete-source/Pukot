@@ -31,7 +31,7 @@ export default function Login() {
     // SIGNUP
     // ═══════════════════════════════════════════════════════════════
     if (isSignup) {
-      const { data: authData, error: authError } = await supabase.auth.signUp({
+      const { error: authError } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -62,8 +62,8 @@ export default function Login() {
     // ═══════════════════════════════════════════════════════════════
     // LOGIN
     // ═══════════════════════════════════════════════════════════════
-    const { data: authData, error: authError } =
-      await supabase.auth.signInWithPassword({ email, password });
+    // 👇 FIXED: Removed authData since it's not used in the login flow
+    const { error: authError } = await supabase.auth.signInWithPassword({ email, password });
 
     if (authError) {
       alert("Invalid email or password.");
@@ -71,20 +71,22 @@ export default function Login() {
       return;
     }
 
-    // Fetch role + profile from "users" table
+    // Fetch role + profile from "users" table (we get the user from the session)
+    const { data: sessionData } = await supabase.auth.getSession();
+    const user = sessionData?.session?.user;
+
     const { data: profile } = await supabase
       .from("users")
       .select("*")
-      .eq("id", authData.user.id)
+      .eq("id", user.id)
       .maybeSingle();
 
     // Fallback if no profile row exists yet
     const mergedUser = profile || {
-      id: authData.user.id,
-      email: authData.user.email,
-      full_name:
-        authData.user.user_metadata?.full_name || authData.user.email,
-      cellphone: authData.user.user_metadata?.cellphone || "",
+      id: user.id,
+      email: user.email,
+      full_name: user.user_metadata?.full_name || user.email,
+      cellphone: user.user_metadata?.cellphone || "",
       role: "customer",
     };
 
@@ -504,7 +506,7 @@ export default function Login() {
           </div>
 
           <h1 className="brand-name">PUKOT</h1>
-          <p className="brand-tagline">⚓ Seafood Restaurant</p>
+          <p className="brand-tagline">Seafood Restaurant</p>
 
           <div className="brand-divider">
             <div className="divider-line" />
