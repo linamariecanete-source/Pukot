@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../supabaseClient";
-import PeakHourAlert from "../admin/PeakHourAlert"; // 👈 Import added
+import PeakHourAlert from "../admin/PeakHourAlert";
 
 function formatTime(timeStr) {
   if (!timeStr) return "";
@@ -27,7 +27,8 @@ const Icon = {
 export default function KitchenDashboard() {
   const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // 👇 FIXED: Removed the 'loading' variable since it wasn't being rendered
+  const [, setLoading] = useState(true);
   const [updating, setUpdating] = useState(null);
 
   const fetchOrders = useCallback(async () => {
@@ -131,7 +132,6 @@ export default function KitchenDashboard() {
         </button>
       </div>
 
-      {/* 👇 PEAK HOUR ALERT ADDED HERE */}
       <div style={{ padding: "16px 24px 0" }}>
         <PeakHourAlert />
       </div>

@@ -49,9 +49,6 @@ export default function Login() {
         return;
       }
 
-      // The DB trigger (handle_new_user) automatically creates the matching
-      // row in public.users. No manual insert needed.
-
       alert("Account created! You can now sign in.");
       setIsSignup(false);
       setForm({ full_name: "", email: "", password: "", cellphone: "" });
@@ -62,7 +59,7 @@ export default function Login() {
     // ═══════════════════════════════════════════════════════════════
     // LOGIN
     // ═══════════════════════════════════════════════════════════════
-    // 👇 FIXED: Removed authData since it's not used in the login flow
+    // 👇 FIXED: Removed the unused 'data' variable to pass Vercel build
     const { error: authError } = await supabase.auth.signInWithPassword({ email, password });
 
     if (authError) {
@@ -71,7 +68,7 @@ export default function Login() {
       return;
     }
 
-    // Fetch role + profile from "users" table (we get the user from the session)
+    // Fetch role + profile from "users" table safely
     const { data: sessionData } = await supabase.auth.getSession();
     const user = sessionData?.session?.user;
 
