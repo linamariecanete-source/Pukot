@@ -1,0 +1,95 @@
+/* Overall layout */
+.customer-app {
+  display: flex;
+  height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #e6f7ff; /* Light ocean blue */
+  color: #03396c; /* Deep navy */
+}
+
+/* Sidebar */
+.customer-app .customer-sidebar {
+  width: 250px;
+  background: linear-gradient(to bottom, #005b96, #03396c);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.customer-sidebar h2 {
+  font-size: 1.5rem;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.customer-sidebar a {
+  color: #fff;
+  text-decoration: none;
+  margin: 15px 0;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.customer-sidebar a:hover {
+  color: #00bfff; /* Bright teal highlight */
+}
+
+/* Main content area */
+.customer-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #f0f8ff; /* Lighter ocean tone */
+  overflow-y: auto;
+}
+
+/* Header */
+.customer-header {
+  padding: 20px 30px;
+  background: #00bfff; /* Teal ocean header */
+  color: #fff;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.customer-header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.customer-header p {
+  margin: 5px 0 0;
+  font-size: 1rem;
+  opacity: 0.85;
+}
+
+/* Main content section */
+.customer-content {
+  padding: 30px;
+  min-height: calc(100vh - 100px);
+}
+
+/* Example card for seafood vibe */
+.seafood-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.seafood-card:hover {
+  transform: translateY(-5px);
+}
+
+.seafood-card h3 {
+  margin-top: 0;
+  color: #005b96;
+}
+
+.seafood-card p {
+  color: #03396c;
+}

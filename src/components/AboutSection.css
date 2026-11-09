@@ -1,0 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap');
+
+/* ── Section ──────────────────────────────────────────────────────── */
+.about-section {
+  padding: 80px 32px;
+  background-color: #88e0ec;
+  font-family: 'Nunito', sans-serif;
+}
+
+/* ── Container ────────────────────────────────────────────────────── */
+.about-container {
+  display: flex;
+  align-items: center;
+  gap: 60px;
+  max-width: 1100px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+}
+
+/* ── Image ────────────────────────────────────────────────────────── */
+.about-image-container {
+  flex: 1;
+  min-width: 280px;
+}
+
+.about-image {
+  width: 100%;
+  border-radius: 14px;
+  object-fit: cover;
+  border: 1px solid rgba(0,100,120,0.25);
+  display: block;
+}
+
+/* ── Text side ────────────────────────────────────────────────────── */
+.about-text {
+  flex: 1;
+  min-width: 280px;
+}
+
+.about-label {
+  font-size: 11px;
+  font-weight: 800;
+  color: #0A6575;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin: 0 0 10px;
+}
+
+.about-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(26px, 4vw, 38px);
+  color: #FF8F00;
+  margin: 0 0 14px;
+  letter-spacing: 0.5px;
+}
+
+.about-line {
+  width: 44px;
+  height: 3px;
+  background: #3AACBE;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+.about-desc {
+  font-size: 14px;
+  color: #0A3D47;
+  line-height: 1.85;
+  margin: 0 0 14px;
+  font-weight: 600;
+}
+
+
+
+.about-highlight {
+  color: #0A6575;
+  font-weight: 800;
+}
+
+
+
+/* ── Responsive ───────────────────────────────────────────────────── */
+@media (max-width: 700px) {
+  .about-section    { padding: 56px 20px; }
+  .about-container  { gap: 36px; }
+  .about-stats      { gap: 16px; }
+}
