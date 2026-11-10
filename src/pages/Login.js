@@ -31,7 +31,6 @@ export default function Login() {
     // SIGNUP
     // ═══════════════════════════════════════════════════════════════
     if (isSignup) {
-      // 👇 FIXED: Changed to signUp
       const { error: authError } = await supabase.auth.signUp({
         email,
         password,
@@ -354,19 +353,11 @@ export default function Login() {
           position: relative;
         }
 
-        .input-icon {
-          position: absolute;
-          left: 14px;
-          top: 50%;
-          transform: translateY(-50%);
-          font-size: 16px;
-          pointer-events: none;
-          opacity: 0.5;
-        }
+        /* Removed .input-icon CSS since we removed the emojis */
 
         .login-input {
           width: 100%;
-          padding: 13px 14px 13px 42px;
+          padding: 13px 14px; /* Adjusted padding since there is no icon on the left */
           background: rgba(255,255,255,0.5);
           border: 1.5px solid rgba(10,80,95,0.2);
           border-radius: 12px;
@@ -388,6 +379,11 @@ export default function Login() {
           font-weight: 600;
         }
 
+        /* Adjusted padding for password input to make room for the Show/Hide button */
+        .login-input.has-toggle {
+          padding-right: 60px;
+        }
+
         .password-toggle {
           position: absolute;
           right: 14px;
@@ -395,14 +391,20 @@ export default function Login() {
           transform: translateY(-50%);
           background: none;
           border: none;
-          color: rgba(10,80,95,0.4);
+          color: #0A5060;
           cursor: pointer;
-          font-size: 16px;
+          font-size: 12px;
+          font-weight: 800;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
           padding: 0;
           line-height: 1;
+          opacity: 0.7;
+          transition: opacity 0.15s;
         }
 
         .password-toggle:hover {
+          opacity: 1;
           color: #0A3D47;
         }
 
@@ -507,27 +509,27 @@ export default function Login() {
 
           <div className="brand-divider">
             <div className="divider-line" />
-            <span className="divider-icon"></span>
+            {/* Removed empty span icon here */}
             <div className="divider-line" />
           </div>
 
           <div className="brand-features">
             <div className="feature-item">
-              <span className="feature-icon"></span>
+              {/* Removed emoji span here */}
               <div className="feature-text">
                 <strong>Table Reservations</strong>
                 Book your perfect dining spot
               </div>
             </div>
             <div className="feature-item">
-              <span className="feature-icon"></span>
+              {/* Removed emoji span here */}
               <div className="feature-text">
                 <strong>Catering Services</strong>
                 Events, weddings & celebrations
               </div>
             </div>
             <div className="feature-item">
-              <span className="feature-icon"></span>
+              {/* Removed emoji span here */}
               <div className="feature-text">
                 <strong>Fresh Seafood Menu</strong>
                 Daily catch, Boodle feasts & more
@@ -565,7 +567,6 @@ export default function Login() {
               <div className="input-group">
                 <label className="input-label">Full Name</label>
                 <div className="input-wrap">
-                  <span className="input-icon">👤</span>
                   <input
                     className="login-input"
                     name="full_name"
@@ -581,22 +582,23 @@ export default function Login() {
             {isSignup && (
               <div className="input-group">
                 <label className="input-label">Cellphone Number</label>
-                <input
-                  className="login-input"
-                  name="cellphone"
-                  type="text"
-                  placeholder="09XXXXXXXXX"
-                  value={form.cellphone}
-                  onChange={handleChange}
-                  required
-                />
+                <div className="input-wrap">
+                  <input
+                    className="login-input"
+                    name="cellphone"
+                    type="text"
+                    placeholder="09XXXXXXXXX"
+                    value={form.cellphone}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
               </div>
             )}
 
             <div className="input-group">
               <label className="input-label">Email Address</label>
               <div className="input-wrap">
-                <span className="input-icon">✉️</span>
                 <input
                   className="login-input"
                   name="email"
@@ -612,9 +614,8 @@ export default function Login() {
             <div className="input-group">
               <label className="input-label">Password</label>
               <div className="input-wrap">
-                <span className="input-icon"></span>
                 <input
-                  className="login-input"
+                  className={`login-input ${showPassword ? '' : 'has-toggle'}`}
                   name="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
@@ -627,7 +628,7 @@ export default function Login() {
                   className="password-toggle"
                   onClick={() => setShowPassword(!showPassword)}
                 >
-                  {showPassword ? "🙈" : "👁️"}
+                  {showPassword ? "Hide" : "Show"}
                 </button>
               </div>
             </div>
