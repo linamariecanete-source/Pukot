@@ -139,7 +139,6 @@ function DetailDrawer({ order, onClose, onUpdateStatus, onUpdatePayment, busyId 
 
   if (!order) return null;
 
-  // ✅ FIXED: Removed unused 'cart' variable (ESLint no-unused-vars error)
   const busy = busyId === order.id;
   const days = daysUntil(order.reservation_date);
 
@@ -532,7 +531,7 @@ export default function CateringAdmin() {
       ) : (
         <div style={styles.list}>
           {filtered.map(o => {
-            const cart = Array.isArray(o.cart) ? o.cart : [];
+            // ✅ FIXED: Removed unused 'cart' variable on this line!
             const days = daysUntil(o.reservation_date);
             const isUpcoming = days >= 0 && o.status !== "Completed" && o.status !== "Cancelled";
             const isUrgent = days >= 0 && days <= 3 && isUpcoming;
