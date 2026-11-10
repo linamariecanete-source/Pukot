@@ -1,13 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { supabase } from "../supabaseClient";
 
-function getStoredUser() {
-  try {
-    return JSON.parse(localStorage.getItem("user") || sessionStorage.getItem("user") || "null");
-  } catch {
-    return null;
-  }
-}
+// ✅ FIXED: Removed getStoredUser() helper - 'user' was declared but never used
 
 const RESERVATION_TYPES = [
   {
@@ -300,7 +294,7 @@ function StepIndicator({ step, requiresDownpayment }) {
 // Main Component
 // ═══════════════════════════════════════════════════════════════════════
 export default function CustomerReservation() {
-  const user = getStoredUser();
+  // ✅ FIXED: Removed unused 'const user = getStoredUser();'
 
   const [submitting, setSubmitting] = useState(false);
   const [step, setStep] = useState(1);

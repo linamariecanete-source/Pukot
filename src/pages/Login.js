@@ -31,7 +31,8 @@ export default function Login() {
     // SIGNUP
     // ═══════════════════════════════════════════════════════════════
     if (isSignup) {
-      const { error: authError } = await supabase.auth.signInWithPassword({
+      // 👇 FIXED: Changed to signUp
+      const { error: authError } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -59,7 +60,6 @@ export default function Login() {
     // ═══════════════════════════════════════════════════════════════
     // LOGIN
     // ═══════════════════════════════════════════════════════════════
-    // 👇 FIXED: Removed the unused 'data' variable to pass Vercel build
     const { error: authError } = await supabase.auth.signInWithPassword({ email, password });
 
     if (authError) {

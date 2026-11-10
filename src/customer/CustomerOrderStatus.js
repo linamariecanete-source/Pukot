@@ -622,8 +622,9 @@ const styles = {
   cardRefWrap: {
     display: "flex", alignItems: "center", gap: 10,
   },
+  // ✅ FIXED: Removed duplicate 'color' key that was crashing Vercel
   cardRef: {
-    fontSize: 10, color: "#A8A29E", fontWeight: 800,
+    fontSize: 10, fontWeight: 800,
     textTransform: "uppercase", letterSpacing: "0.8px",
     padding: "4px 8px", background: "#1C1917",
     color: "#FDE68A", borderRadius: 6,
