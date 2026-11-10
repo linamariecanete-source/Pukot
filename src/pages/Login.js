@@ -228,11 +228,6 @@ export default function Login() {
           );
         }
 
-        .divider-icon {
-          font-size: 16px;
-          opacity: 0.6;
-        }
-
         .brand-features {
           display: flex;
           flex-direction: column;
@@ -248,11 +243,6 @@ export default function Login() {
           background: rgba(255,255,255,0.3);
           border: 1px solid rgba(10,80,95,0.2);
           border-radius: 12px;
-        }
-
-        .feature-icon {
-          font-size: 20px;
-          flex-shrink: 0;
         }
 
         .feature-text {
@@ -353,11 +343,9 @@ export default function Login() {
           position: relative;
         }
 
-        /* Removed .input-icon CSS since we removed the emojis */
-
         .login-input {
           width: 100%;
-          padding: 13px 14px; /* Adjusted padding since there is no icon on the left */
+          padding: 13px 14px;
           background: rgba(255,255,255,0.5);
           border: 1.5px solid rgba(10,80,95,0.2);
           border-radius: 12px;
@@ -379,7 +367,6 @@ export default function Login() {
           font-weight: 600;
         }
 
-        /* Adjusted padding for password input to make room for the Show/Hide button */
         .login-input.has-toggle {
           padding-right: 60px;
         }
@@ -509,27 +496,23 @@ export default function Login() {
 
           <div className="brand-divider">
             <div className="divider-line" />
-            {/* Removed empty span icon here */}
             <div className="divider-line" />
           </div>
 
           <div className="brand-features">
             <div className="feature-item">
-              {/* Removed emoji span here */}
               <div className="feature-text">
                 <strong>Table Reservations</strong>
                 Book your perfect dining spot
               </div>
             </div>
             <div className="feature-item">
-              {/* Removed emoji span here */}
               <div className="feature-text">
                 <strong>Catering Services</strong>
                 Events, weddings & celebrations
               </div>
             </div>
             <div className="feature-item">
-              {/* Removed emoji span here */}
               <div className="feature-text">
                 <strong>Fresh Seafood Menu</strong>
                 Daily catch, Boodle feasts & more
