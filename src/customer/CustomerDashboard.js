@@ -52,10 +52,10 @@ const Icon = {
 };
 
 const quickActions = [
-  { label: "Book a Table",     icon: <Icon.Calendar size={20} />, path: "/customer/reservations", desc: "Reserve your spot",   color: "#0077b6" },
-  { label: "Browse Menu",      icon: <Icon.Menu size={20} />,     path: "/customer/menu",         desc: "Explore our dishes",  color: "#00b4d8" },
-  { label: "Catering Inquiry", icon: <Icon.Catering size={20} />, path: "/customer/catering",     desc: "Plan your event",     color: "#c8832a" },
-  { label: "View History",     icon: <Icon.History size={20} />,  path: "/customer/history",      desc: "Past activities",     color: "#0A3D47" },
+  { label: "Book a Table",     icon: <Icon.Calendar size={20} />, path: "/customer/reservations", desc: "Reserve your spot",   color: "#1C1917" },
+  { label: "Browse Menu",      icon: <Icon.Menu size={20} />,     path: "/customer/menu",         desc: "Explore our dishes",  color: "#1C1917" },
+  { label: "Catering Inquiry", icon: <Icon.Catering size={20} />, path: "/customer/catering",     desc: "Plan your event",     color: "#1C1917" },
+  { label: "View History",     icon: <Icon.History size={20} />,  path: "/customer/history",      desc: "Past activities",     color: "#1C1917" },
 ];
 
 const statusCfg = {
@@ -131,15 +131,16 @@ export default function CustomerDashboard() {
   const fmtTime = (t) => { if (!t) return ""; const [h, m] = t.split(":").map(Number); return `${h % 12 || 12}:${String(m).padStart(2, "0")} ${h >= 12 ? "PM" : "AM"}`; };
 
   const statCards = [
-    { label: "Active Reservations", value: activeReservationsCount, icon: <Icon.Calendar size={22} />, color: "#0077b6", path: "/customer/orderstatus" },
-    { label: "Catering Orders",     value: activeCat,               icon: <Icon.Catering size={22} />, color: "#c8832a", path: "/customer/orderstatus" },
-    { label: "Total Activities",    value: totalActivities,         icon: <Icon.History size={22} />, color: "#0A3D47", path: "/customer/history" },
+    { label: "Active Reservations", value: activeReservationsCount, icon: <Icon.Calendar size={22} />, path: "/customer/orderstatus" },
+    { label: "Catering Orders",     value: activeCat,               icon: <Icon.Catering size={22} />, path: "/customer/orderstatus" },
+    { label: "Total Activities",    value: totalActivities,         icon: <Icon.History size={22} />, path: "/customer/history" },
   ];
 
   return (
     <div style={S.page}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        * { box-sizing: border-box; }
       `}</style>
 
       {/* Header */}
@@ -160,7 +161,7 @@ export default function CustomerDashboard() {
       <div style={S.statsRow}>
         {statCards.map(s => (
           <div key={s.label} style={S.statCard} onClick={() => navigate(s.path)}>
-            <div style={{ ...S.statIcon, background: s.color + "15", color: s.color }}>
+            <div style={S.statIcon}>
               {s.icon}
             </div>
             <div>
@@ -177,7 +178,7 @@ export default function CustomerDashboard() {
       <div style={S.actionsGrid}>
         {quickActions.map(a => (
           <button key={a.label} style={S.actionCard} onClick={() => navigate(a.path)}>
-            <div style={{ ...S.actionIcon, background: a.color + "15", color: a.color }}>
+            <div style={S.actionIcon}>
               {a.icon}
             </div>
             <div style={S.actionText}>
@@ -203,7 +204,7 @@ export default function CustomerDashboard() {
             <div style={S.recentLoading}>Loading...</div>
           ) : reservations.length === 0 ? (
             <div style={S.emptyState}>
-              <Icon.Calendar size={28} style={{ color: "#D6D3D1" }} />
+              <Icon.Calendar size={28} style={{ color: "#A8A29E" }} />
               <span style={S.emptyText}>No reservations yet</span>
               <button style={S.emptyBtn} onClick={() => navigate("/customer/reservations")}>Book a Table</button>
             </div>
@@ -241,7 +242,7 @@ export default function CustomerDashboard() {
             <div style={S.recentLoading}>Loading...</div>
           ) : catering.length === 0 ? (
             <div style={S.emptyState}>
-              <Icon.Catering size={28} style={{ color: "#D6D3D1" }} />
+              <Icon.Catering size={28} style={{ color: "#A8A29E" }} />
               <span style={S.emptyText}>No catering orders yet</span>
               <button style={S.emptyBtn} onClick={() => navigate("/customer/catering")}>Submit Inquiry</button>
             </div>
@@ -308,7 +309,7 @@ export default function CustomerDashboard() {
           </div>
         </div>
         <div style={S.bannerIconWrap}>
-           <Icon.Catering size={48} style={{ color: "#90e0ef" }} />
+           <Icon.Catering size={48} style={{ color: "#A8A29E" }} />
         </div>
       </div>
     </div>
@@ -320,172 +321,170 @@ const S = {
     padding: "40px 48px 60px", 
     maxWidth: 1100, 
     margin: "0 auto",
-    fontFamily: "'Nunito', sans-serif", // Body font
+    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
     minHeight: "100vh",
     background: "#FAFAF9",
-    color: "#0A2A30", // Deep sea green for text
+    color: "#1C1917",
   },
   header: { 
     display: "flex", justifyContent: "space-between", 
     alignItems: "flex-start", marginBottom: 32,
   },
   greeting: { 
-    margin: 0, fontSize: 14, color: "#0A5060", 
-    fontWeight: 700, textTransform: "uppercase", letterSpacing: "1px",
-    fontFamily: "'Fredoka', sans-serif",
+    margin: 0, fontSize: 11, color: "#78716C", 
+    fontWeight: 700, textTransform: "uppercase", letterSpacing: "1.2px",
   },
   name: { 
-    margin: "8px 0 10px", fontSize: 36, fontWeight: 600, 
-    color: "#0A3D47", letterSpacing: "-0.5px",
-    fontFamily: "'Fredoka', sans-serif",
+    margin: "6px 0 8px", fontSize: 28, fontWeight: 800, 
+    color: "#1C1917", letterSpacing: "-0.7px",
   },
-  subtitle: { margin: 0, fontSize: 16, color: "#4f758b", fontWeight: 600 },
+  subtitle: { margin: 0, fontSize: 14, color: "#78716C" },
   dateBox: { 
     textAlign: "center", background: "#FFFFFF", 
-    border: "2px solid #e0f2f1", borderRadius: 20, 
-    padding: "12px 24px", boxShadow: "0 4px 12px rgba(10, 61, 71, 0.04)",
+    border: "1px solid #E7E5E4", borderRadius: 14, 
+    padding: "12px 24px", boxShadow: "0 1px 3px rgba(28,25,23,0.04)",
   },
   dateDay: { 
-    fontSize: 36, fontWeight: 600, color: "#0077b6", 
+    fontSize: 32, fontWeight: 800, color: "#1C1917", 
     lineHeight: 1, letterSpacing: "-1px",
-    fontFamily: "'Fredoka', sans-serif",
   },
   dateMon: { 
-    fontSize: 14, color: "#0A5060", marginTop: 4, 
-    fontWeight: 700, textTransform: "uppercase", letterSpacing: "1px",
+    fontSize: 11, color: "#78716C", marginTop: 4, 
+    fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px",
   },
-  dateYear: { fontSize: 13, color: "#4f758b", marginTop: 2, fontWeight: 700 },
+  dateYear: { fontSize: 11, color: "#A8A29E", marginTop: 2, fontWeight: 600 },
   
   statsRow: { display: "flex", gap: 16, marginBottom: 32 },
   statCard: { 
-    flex: 1, background: "#FFFFFF", border: "2px solid #e0f2f1", 
-    borderRadius: 20, padding: "20px 24px", display: "flex", 
+    flex: 1, background: "#FFFFFF", border: "1px solid #E7E5E4", 
+    borderRadius: 14, padding: "20px 24px", display: "flex", 
     alignItems: "center", gap: 16, cursor: "pointer", 
-    boxShadow: "0 4px 12px rgba(10, 61, 71, 0.03)", transition: "transform 0.2s",
+    boxShadow: "0 1px 3px rgba(28,25,23,0.04)", transition: "border-color 0.2s",
   },
   statIcon: { 
-    width: 48, height: 48, borderRadius: 14, 
+    width: 48, height: 48, borderRadius: 12, 
+    background: "#F5F5F4", color: "#44403C",
     display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, 
   },
   statValue: { 
-    fontSize: 32, fontWeight: 600, color: "#0A3D47", 
-    lineHeight: 1, minWidth: 28, fontFamily: "'Fredoka', sans-serif",
+    fontSize: 26, fontWeight: 800, color: "#1C1917", 
+    lineHeight: 1, minWidth: 28, letterSpacing: "-0.5px",
   },
-  statLabel: { fontSize: 14, color: "#4f758b", marginTop: 4, fontWeight: 700 },
-  statArrow: { marginLeft: "auto", color: "#90e0ef", display: "flex" },
-  skel: { display: "inline-block", width: 28, height: 24, background: "#e0f2f1", borderRadius: 6 },
+  statLabel: { fontSize: 12, color: "#78716C", marginTop: 6, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.5px" },
+  statArrow: { marginLeft: "auto", color: "#A8A29E", display: "flex" },
+  skel: { display: "inline-block", width: 28, height: 24, background: "#F5F5F4", borderRadius: 6 },
   
   sectionTitle: { 
-    fontSize: 18, fontWeight: 600, color: "#0A3D47", 
-    marginBottom: 16, textTransform: "uppercase", letterSpacing: "1px", 
-    fontFamily: "'Fredoka', sans-serif",
+    fontSize: 16, fontWeight: 700, color: "#1C1917", 
+    marginBottom: 16, 
   },
   
   actionsGrid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 32 },
   actionCard: { 
     display: "flex", alignItems: "center", gap: 16, padding: "18px 20px", 
-    background: "#FFFFFF", border: "2px solid #e0f2f1", borderRadius: 20, 
-    cursor: "pointer", textAlign: "left", boxShadow: "0 4px 12px rgba(10, 61, 71, 0.03)",
-    transition: "border-color 0.2s", fontFamily: "'Nunito', sans-serif",
+    background: "#FFFFFF", border: "1px solid #E7E5E4", borderRadius: 14, 
+    cursor: "pointer", textAlign: "left", boxShadow: "0 1px 3px rgba(28,25,23,0.04)",
+    transition: "border-color 0.2s", fontFamily: "inherit",
   },
   actionIcon: { 
-    width: 44, height: 44, borderRadius: 14, 
+    width: 44, height: 44, borderRadius: 12, 
+    background: "#FAFAF9", border: "1px solid #E7E5E4", color: "#44403C",
     display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, 
   },
   actionText: { flex: 1, display: "flex", flexDirection: "column", gap: 2 },
-  actionLabel: { fontSize: 16, fontWeight: 800, color: "#0A3D47" },
-  actionDesc: { fontSize: 13, color: "#4f758b", fontWeight: 600 },
-  actionArrow: { color: "#90e0ef", display: "flex" },
+  actionLabel: { fontSize: 15, fontWeight: 700, color: "#1C1917" },
+  actionDesc: { fontSize: 13, color: "#78716C" },
+  actionArrow: { color: "#A8A29E", display: "flex" },
   
   recentGrid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 32 },
   recentCard: { 
-    background: "#FFFFFF", border: "2px solid #e0f2f1", 
-    borderRadius: 20, padding: "20px 24px", boxShadow: "0 4px 12px rgba(10, 61, 71, 0.03)", 
+    background: "#FFFFFF", border: "1px solid #E7E5E4", 
+    borderRadius: 14, padding: "20px 24px", boxShadow: "0 1px 3px rgba(28,25,23,0.04)", 
   },
   recentHead: { 
     display: "flex", justifyContent: "space-between", 
     alignItems: "center", marginBottom: 16, 
-    borderBottom: "2px dashed #e0f2f1", paddingBottom: 12,
+    borderBottom: "1px solid #F5F5F4", paddingBottom: 12,
   },
-  recentTitle: { fontSize: 16, fontWeight: 600, color: "#0A3D47", fontFamily: "'Fredoka', sans-serif" },
+  recentTitle: { fontSize: 15, fontWeight: 700, color: "#1C1917" },
   viewAllBtn: { 
-    fontSize: 12, color: "#0077b6", background: "transparent", 
-    border: "none", cursor: "pointer", fontWeight: 800, 
-    textTransform: "uppercase", letterSpacing: "0.5px", fontFamily: "'Fredoka', sans-serif",
+    fontSize: 12, color: "#1C1917", background: "transparent", 
+    border: "none", cursor: "pointer", fontWeight: 700, 
+    textTransform: "uppercase", letterSpacing: "0.5px", fontFamily: "inherit",
   },
-  recentLoading: { fontSize: 14, color: "#4f758b", textAlign: "center", padding: "24px 0", fontWeight: 600 },
+  recentLoading: { fontSize: 14, color: "#78716C", textAlign: "center", padding: "24px 0", fontWeight: 600 },
   emptyState: { 
     display: "flex", flexDirection: "column", alignItems: "center", 
     gap: 10, padding: "30px 0", 
   },
-  emptyText: { fontSize: 14, color: "#4f758b", fontWeight: 600 },
+  emptyText: { fontSize: 14, color: "#78716C", fontWeight: 500 },
   emptyBtn: { 
-    marginTop: 4, padding: "8px 16px", background: "#e0f2f1", 
-    border: "1px solid #b2dfdb", borderRadius: 20, color: "#0077b6", 
-    cursor: "pointer", fontSize: 12, fontWeight: 800, 
-    transition: "all 0.2s", fontFamily: "'Fredoka', sans-serif",
+    marginTop: 4, padding: "8px 16px", background: "#FAFAF9", 
+    border: "1px solid #E7E5E4", borderRadius: 8, color: "#44403C", 
+    cursor: "pointer", fontSize: 12, fontWeight: 600, 
+    transition: "all 0.2s", fontFamily: "inherit",
   },
   recentList: { display: "flex", flexDirection: "column", gap: 10 },
   recentItem: { 
     display: "flex", alignItems: "flex-start", justifyContent: "space-between", 
-    padding: "14px", background: "#FAFAF9", border: "1px solid #e0f2f1", 
-    borderRadius: 14, 
+    padding: "14px", background: "#FAFAF9", border: "1px solid #F5F5F4", 
+    borderRadius: 12, 
   },
   recentLeft: { display: "flex", alignItems: "flex-start", gap: 12 },
   statusDot: { width: 8, height: 8, borderRadius: "50%", flexShrink: 0, marginTop: 6 },
-  recentMain: { fontSize: 14, fontWeight: 800, color: "#0A3D47" },
-  recentSub: { fontSize: 12, color: "#4f758b", marginTop: 3, fontWeight: 600 },
+  recentMain: { fontSize: 14, fontWeight: 700, color: "#1C1917" },
+  recentSub: { fontSize: 12, color: "#78716C", marginTop: 3, fontWeight: 500 },
   recentBadge: { 
-    fontSize: 11, fontWeight: 800, padding: "4px 10px", 
+    fontSize: 11, fontWeight: 700, padding: "4px 10px", 
     borderRadius: 20, textTransform: "capitalize", flexShrink: 0, 
-    whiteSpace: "nowrap", fontFamily: "'Fredoka', sans-serif",
+    whiteSpace: "nowrap", 
   },
   
   notifList: { display: "flex", flexDirection: "column", gap: 10, marginBottom: 32 },
   notifItem: { 
-    background: "#FFFFFF", border: "2px solid #e0f2f1", 
-    borderRadius: 16, padding: 16, cursor: "pointer", 
+    background: "#FFFFFF", border: "1px solid #E7E5E4", 
+    borderRadius: 12, padding: 16, cursor: "pointer", 
     display: "flex", justifyContent: "space-between", alignItems: "flex-start",
-    boxShadow: "0 2px 8px rgba(10, 61, 71, 0.02)",
+    boxShadow: "0 1px 3px rgba(28,25,23,0.04)",
   },
-  notifUnread: { background: "#f0fbfc", border: "2px solid #b2dfdb" },
+  notifUnread: { background: "#FAFAF9", border: "1px solid #D6D3D1" },
   notifContent: { flex: 1 },
-  notifTitle: { fontSize: 15, fontWeight: 800, color: "#0A3D47", marginBottom: 6 },
-  notifMessage: { fontSize: 13, color: "#4f758b", lineHeight: 1.5, whiteSpace: "pre-line", fontWeight: 600 },
-  notifTime: { fontSize: 11, color: "#90e0ef", marginTop: 8, fontWeight: 700 },
-  notifDot: { width: 10, height: 10, background: "#0077b6", borderRadius: "50%", flexShrink: 0, marginTop: 4 },
+  notifTitle: { fontSize: 14, fontWeight: 700, color: "#1C1917", marginBottom: 6 },
+  notifMessage: { fontSize: 13, color: "#78716C", lineHeight: 1.5, whiteSpace: "pre-line" },
+  notifTime: { fontSize: 11, color: "#A8A29E", marginTop: 8, fontWeight: 600 },
+  notifDot: { width: 8, height: 8, background: "#1C1917", borderRadius: "50%", flexShrink: 0, marginTop: 4 },
   notifBadge: { 
-    background: "#e05555", color: "white", fontSize: 11, 
-    fontWeight: 800, padding: "2px 7px", borderRadius: 10, marginLeft: 8, 
+    background: "#1C1917", color: "white", fontSize: 11, 
+    fontWeight: 700, padding: "2px 8px", borderRadius: 10, marginLeft: 8, 
   },
   
   banner: { 
-    background: "#0A3D47", border: "2px solid #0A6575", 
-    borderRadius: 24, padding: "32px", display: "flex", 
+    background: "#1C1917", border: "1px solid #1C1917", 
+    borderRadius: 16, padding: "32px", display: "flex", 
     justifyContent: "space-between", alignItems: "center", 
   },
   bannerTag: { 
-    fontSize: 12, color: "#90e0ef", fontWeight: 800, 
-    marginBottom: 8, textTransform: "uppercase", letterSpacing: "1px", fontFamily: "'Fredoka', sans-serif",
+    fontSize: 11, color: "#A8A29E", fontWeight: 700, 
+    marginBottom: 8, textTransform: "uppercase", letterSpacing: "1px", 
   },
-  bannerTitle: { fontSize: 28, fontWeight: 600, color: "#FFFFFF", marginBottom: 10, fontFamily: "'Fredoka', sans-serif" },
+  bannerTitle: { fontSize: 24, fontWeight: 800, color: "#FFFFFF", marginBottom: 10, letterSpacing: "-0.5px" },
   bannerText: { 
-    fontSize: 15, color: "#caf0f8", marginBottom: 20, 
-    maxWidth: 480, lineHeight: 1.6, fontWeight: 600,
+    fontSize: 14, color: "#D6D3D1", marginBottom: 20, 
+    maxWidth: 480, lineHeight: 1.6, 
   },
   bannerBtns: { display: "flex", gap: 12 },
   bannerBtn: { 
-    padding: "12px 24px", background: "#00b4d8", border: "none", 
-    borderRadius: 10, color: "#0A3D47", fontWeight: 700, 
-    fontSize: 14, cursor: "pointer", fontFamily: "'Fredoka', sans-serif",
+    padding: "12px 24px", background: "#FFFFFF", border: "none", 
+    borderRadius: 10, color: "#1C1917", fontWeight: 700, 
+    fontSize: 14, cursor: "pointer", fontFamily: "inherit",
   },
   bannerBtnOutline: { 
-    padding: "12px 24px", background: "transparent", border: "2px solid #90e0ef", 
-    borderRadius: 10, color: "#90e0ef", fontWeight: 700, 
-    fontSize: 14, cursor: "pointer", fontFamily: "'Fredoka', sans-serif",
+    padding: "12px 24px", background: "transparent", border: "1px solid #44403C", 
+    borderRadius: 10, color: "#D6D3D1", fontWeight: 600, 
+    fontSize: 14, cursor: "pointer", fontFamily: "inherit",
   },
   bannerIconWrap: { 
-    width: 90, height: 90, borderRadius: 24, background: "#0A5060",
+    width: 90, height: 90, borderRadius: 16, background: "#292524",
     display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
   },
 };

@@ -142,6 +142,10 @@ function DetailDrawer({ order, onClose, onUpdateStatus, onUpdatePayment, busyId 
   const busy = busyId === order.id;
   const days = daysUntil(order.reservation_date);
 
+  // 👇 SPLIT ITEMS BY KITCHEN STATION
+  const foodItems = order.cart?.filter(it => it.kitchen_station !== "Dessert") || [];
+  const dessertItems = order.cart?.filter(it => it.kitchen_station === "Dessert") || [];
+
   return (
     <div style={drawer.overlay} onClick={onClose}>
       <div style={drawer.panel} onClick={e => e.stopPropagation()}>
@@ -222,25 +226,46 @@ function DetailDrawer({ order, onClose, onUpdateStatus, onUpdatePayment, busyId 
             </div>
           </div>
 
-          {/* Items */}
+          {/* 👇 FOOD KITCHEN ITEMS */}
           <div style={drawer.section}>
-            <div style={drawer.sectionLabel}>Ordered Items</div>
-            {!Array.isArray(order.cart) || order.cart.length === 0 ? (
-              <div style={drawer.empty}>No items in this catering order.</div>
+            <div style={drawer.sectionLabel}>Food Kitchen</div>
+            {foodItems.length === 0 ? (
+              <div style={drawer.empty}>No food items in this order.</div>
             ) : (
               <div style={drawer.itemsTable}>
-                {order.cart.map((it, i) => (
+                {foodItems.map((it, i) => (
                   <div key={i} style={drawer.itemRow}>
                     <span style={drawer.itemName}>{it.qty} × {it.name}</span>
                     <span style={drawer.itemPrice}>{formatCurrency(it.qty * it.price)}</span>
                   </div>
                 ))}
-                <div style={drawer.itemTotalRow}>
-                  <span>Total</span>
-                  <span>{formatCurrency(order.total)}</span>
-                </div>
               </div>
             )}
+          </div>
+
+          {/* 👇 DESSERT KITCHEN ITEMS */}
+          <div style={drawer.section}>
+            <div style={drawer.sectionLabel}>Dessert Kitchen</div>
+            {dessertItems.length === 0 ? (
+              <div style={drawer.empty}>No dessert items in this order.</div>
+            ) : (
+              <div style={drawer.itemsTable}>
+                {dessertItems.map((it, i) => (
+                  <div key={i} style={drawer.itemRow}>
+                    <span style={drawer.itemName}>{it.qty} × {it.name}</span>
+                    <span style={drawer.itemPrice}>{formatCurrency(it.qty * it.price)}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Total (Moved outside so it shows for the whole order) */}
+          <div style={{ ...drawer.itemsTable, borderTop: "none", borderRadius: "0 0 12px 12px", marginTop: -12 }}>
+            <div style={drawer.itemTotalRow}>
+              <span>Grand Total</span>
+              <span>{formatCurrency(order.total)}</span>
+            </div>
           </div>
 
           {/* Payment */}
@@ -418,7 +443,16 @@ export default function CateringAdmin() {
 
   const updateStatus = async (id, status) => {
     setBusyId(id);
-    const { error } = await supabase.from("orders").update({ status }).eq("id", id);
+    
+    // 👇 AUTOMATIC TIMER: When confirming, set the ETA to 45 mins from now
+    const updates = { status };
+    if (status === "Confirmed") {
+      const now = new Date();
+      now.setMinutes(now.getMinutes() + 45);
+      updates.estimated_ready_at = now.toISOString();
+    }
+
+    const { error } = await supabase.from("orders").update(updates).eq("id", id);
     if (error) alert("Error: " + error.message);
     await fetchOrders();
     setBusyId(null);
@@ -531,7 +565,6 @@ export default function CateringAdmin() {
       ) : (
         <div style={styles.list}>
           {filtered.map(o => {
-            // ✅ FIXED: Removed unused 'cart' variable on this line!
             const days = daysUntil(o.reservation_date);
             const isUpcoming = days >= 0 && o.status !== "Completed" && o.status !== "Cancelled";
             const isUrgent = days >= 0 && days <= 3 && isUpcoming;

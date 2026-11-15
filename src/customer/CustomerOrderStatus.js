@@ -165,11 +165,63 @@ function StatusStepper({ status, type }) {
   );
 }
 
+// ── Live Preparation Timer ────────────────────────────────────────────
+function OrderTimer({ readyAt }) {
+  const [timeLeft, setTimeLeft] = useState("");
+  const [isDone, setIsDone] = useState(false);
+
+  useEffect(() => {
+    if (!readyAt) return;
+
+    const interval = setInterval(() => {
+      const now = new Date().getTime();
+      const target = new Date(readyAt).getTime();
+      const distance = target - now;
+
+      if (distance < 0) {
+        setIsDone(true);
+        setTimeLeft("Ready soon!");
+        clearInterval(interval);
+        return;
+      }
+
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      
+      setTimeLeft(`${minutes}m ${seconds}s`);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [readyAt]);
+
+  if (!readyAt) return null;
+
+  return (
+    <div style={{ 
+      margin: "0 24px 18px", 
+      padding: "12px 16px", 
+      background: isDone ? "#D1FAE5" : "#EFF6FF", 
+      color: isDone ? "#065F46" : "#1E40AF",
+      borderRadius: 10, 
+      fontWeight: 700,
+      fontSize: 13,
+      display: "flex",
+      alignItems: "center",
+      gap: 8,
+      border: `1px solid ${isDone ? "#A7F3D0" : "#BFDBFE"}`
+    }}>
+      <Icon.Clock size={16} />
+      {isDone ? "Your food is ready!" : `Estimated preparation time: ${timeLeft}`}
+    </div>
+  );
+}
+
 // ── Order Card ────────────────────────────────────────────────────────
 function OrderCard({ order, onRefresh }) {
   const meta = STATUS_META[order.status] || STATUS_META.Pending;
   const cart = Array.isArray(order.cart) ? order.cart : [];
   const isCancelled = order.status === "Cancelled";
+  const showTimer = ["Confirmed", "Cooking", "Preparing"].includes(order.status);
 
   return (
     <div style={{ ...styles.card, ...(isCancelled ? styles.cardCancelled : {}) }}>
@@ -206,6 +258,11 @@ function OrderCard({ order, onRefresh }) {
       <div style={styles.stepperWrap}>
         <StatusStepper status={order.status} type={order.reservation_type} />
       </div>
+
+      {/* Live Timer (Only shows if confirmed/cooking/preparing) */}
+      {showTimer && order.estimated_ready_at && (
+        <OrderTimer readyAt={order.estimated_ready_at} />
+      )}
 
       {/* Details grid */}
       <div style={styles.detailsGrid}>
@@ -622,7 +679,6 @@ const styles = {
   cardRefWrap: {
     display: "flex", alignItems: "center", gap: 10,
   },
-  // ✅ FIXED: Removed duplicate 'color' key that was crashing Vercel
   cardRef: {
     fontSize: 10, fontWeight: 800,
     textTransform: "uppercase", letterSpacing: "0.8px",

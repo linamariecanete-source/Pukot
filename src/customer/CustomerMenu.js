@@ -550,10 +550,12 @@ export default function CustomerReservation() {
       }
     }
 
+    // ✅ FIXED: Added kitchen_station here so it gets saved in the JSON
     const cartPayload = cartArray.map(i => ({
       id: i.id, name: i.name, qty: i.qty,
       price: Number(i.price || 0),
       instructions: form.notes.trim() || null,
+      kitchen_station: i.kitchen_station || "Food",
     }));
 
     const { error } = await supabase.from("orders").insert([{
