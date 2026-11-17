@@ -63,8 +63,7 @@ export default function AdminOrders() {
   const fetchOrders = useCallback(async () => {
     setLoading(true);
 
-    // We fetch all active statuses (Confirmed, Cooking, etc.)
-    // Walk-in orders are inserted with status "Confirmed", so they will show up here.
+    // We fetch active statuses. Because Walk-in is set to "Cooking", it will appear here.
     const { data: raw, error } = await supabase
       .from("orders")
       .select("*")
