@@ -35,7 +35,6 @@ export default function AdminWalkIn() {
   // Form State
   const [form, setForm] = useState({
     pax: 2,
-    table_number: "",
     payment_method: "Cash",
     notes: "",
   });
@@ -104,9 +103,10 @@ export default function AdminWalkIn() {
     setSubmitting(true);
     setSuccessMsg("");
 
-    // Format cart for database
+    // Format cart for database (include kitchen_station for the split view)
     const cartPayload = cartArray.map(i => ({
-      id: i.id, name: i.name, qty: i.qty, price: Number(i.price)
+      id: i.id, name: i.name, qty: i.qty, price: Number(i.price),
+      kitchen_station: i.kitchen_station || "Food"
     }));
 
     // 👇 Auto-generate Date & Time based on current moment
@@ -116,6 +116,8 @@ export default function AdminWalkIn() {
     const autoDate = localDate.toISOString().split("T")[0];
     const autoTime = localDate.toTimeString().split(" ")[0].substring(0, 5); // HH:MM
 
+    // Set ETA to 45 mins from now
+    const eta = new Date(now.getTime() + 45 * 60000).toISOString();
 
     const { data, error } = await supabase.from("orders").insert([{
       user_id: null, 
@@ -124,7 +126,6 @@ export default function AdminWalkIn() {
       reservation_date: autoDate, 
       reservation_time: autoTime, 
       pax: form.pax,
-      table_number: form.table_number ? Number(form.table_number) : null,
       cart: cartPayload,
       total: cartTotal,
       downpayment: cartTotal,
@@ -134,6 +135,7 @@ export default function AdminWalkIn() {
       reservation_type: "Dine-in",
       notes: form.notes.trim() || null,
       is_peak_hour: false,
+      estimated_ready_at: eta, // Added so the timer works for walk-ins too!
     }]).select();
 
     setSubmitting(false);
@@ -148,7 +150,7 @@ export default function AdminWalkIn() {
       // Reset form and cart
       setCart({});
       setForm({
-        pax: 2, table_number: "", payment_method: "Cash", notes: ""
+        pax: 2, payment_method: "Cash", notes: ""
       });
       
       // Clear success message after 4 seconds
@@ -178,13 +180,6 @@ export default function AdminWalkIn() {
                 <input type="number" min="1" style={styles.input} value={form.pax} onChange={e => setForm({...form, pax: parseInt(e.target.value)})} />
               </div>
               <div style={styles.inputGroup}>
-                <label style={styles.label}>Table Number</label>
-                <input type="number" style={styles.input} value={form.table_number} onChange={e => setForm({...form, table_number: e.target.value})} placeholder="e.g. 5" />
-              </div>
-            </div>
-
-            <div style={styles.inputRow}>
-              <div style={styles.inputGroup}>
                 <label style={styles.label}>Payment Method</label>
                 <select style={styles.input} value={form.payment_method} onChange={e => setForm({...form, payment_method: e.target.value})}>
                   <option value="Cash">Cash</option>
@@ -192,6 +187,9 @@ export default function AdminWalkIn() {
                   <option value="Card">Card</option>
                 </select>
               </div>
+            </div>
+
+            <div style={styles.inputRow}>
               <div style={styles.inputGroup}>
                 <label style={styles.label}>Special Notes</label>
                 <input style={styles.input} value={form.notes} onChange={e => setForm({...form, notes: e.target.value})} placeholder="Allergies, special requests..." />
