@@ -29,6 +29,12 @@ const Icon = {
       <path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3z"/>
     </svg>
   ),
+  WalkIn: (p) => (
+    <svg width={p?.size || 20} height={p?.size || 20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+      <line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/>
+    </svg>
+  ),
   Cake: (p) => (
     <svg width={p?.size || 20} height={p?.size || 20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"/>
@@ -52,11 +58,13 @@ export default function AdminOrders() {
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(null);
   const [activeTab, setActiveTab] = useState("Dine-in");
-  const [searchTerm, setSearchTerm] = useState(""); // 👈 Search state
+  const [searchTerm, setSearchTerm] = useState("");
 
   const fetchOrders = useCallback(async () => {
     setLoading(true);
 
+    // We fetch all active statuses (Confirmed, Cooking, etc.)
+    // Walk-in orders are inserted with status "Confirmed", so they will show up here.
     const { data: raw, error } = await supabase
       .from("orders")
       .select("*")
@@ -119,11 +127,20 @@ export default function AdminOrders() {
     fetchOrders();
   };
 
-  // 👇 Filter Logic: Apply tab AND search query
+  // Filter Logic: Apply tab AND search query
   const filteredOrders = useMemo(() => {
     return orders.filter(o => {
       // 1. Filter by Tab
-      if (o.reservation_type !== activeTab) return false;
+      if (activeTab === "Walk-in") {
+         // Walk-ins are dine-in type but have no user ID
+         if (o.reservation_type !== "Dine-in" || o.user_id !== null) return false;
+      } else if (activeTab === "Dine-in") {
+         // Regular dine-in has a user_id
+         if (o.reservation_type !== "Dine-in" || o.user_id === null) return false;
+      } else {
+         // Catering
+         if (o.reservation_type !== activeTab) return false;
+      }
 
       // 2. Filter by Search
       if (searchTerm.trim()) {
@@ -291,9 +308,23 @@ export default function AdminOrders() {
           >
             <Icon.Utensils size={16} /> Dine-in
             <span style={{...styles.tabCount, background: activeTab === "Dine-in" ? "rgba(255,255,255,0.2)" : "#E7E5E4"}}>
-              {orders.filter(o => o.reservation_type === "Dine-in").length}
+              {orders.filter(o => o.reservation_type === "Dine-in" && o.user_id !== null).length}
             </span>
           </button>
+          
+          <button
+            onClick={() => setActiveTab("Walk-in")}
+            style={{
+              ...styles.tabBtn,
+              ...(activeTab === "Walk-in" ? styles.tabBtnActive : {}),
+            }}
+          >
+            <Icon.WalkIn size={16} /> Walk-in
+            <span style={{...styles.tabCount, background: activeTab === "Walk-in" ? "rgba(255,255,255,0.2)" : "#E7E5E4"}}>
+              {orders.filter(o => o.reservation_type === "Dine-in" && o.user_id === null).length}
+            </span>
+          </button>
+
           <button
             onClick={() => setActiveTab("Catering")}
             style={{
