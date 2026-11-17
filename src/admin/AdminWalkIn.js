@@ -109,9 +109,8 @@ export default function AdminWalkIn() {
       kitchen_station: i.kitchen_station || "Food"
     }));
 
-    // 👇 Auto-generate Date & Time based on current moment
+    // Auto-generate Date & Time based on current moment
     const now = new Date();
-    // Adjust for local timezone offset so the DB gets the correct local date
     const localDate = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
     const autoDate = localDate.toISOString().split("T")[0];
     const autoTime = localDate.toTimeString().split(" ")[0].substring(0, 5); // HH:MM
@@ -131,11 +130,11 @@ export default function AdminWalkIn() {
       downpayment: cartTotal,
       payment_method: form.payment_method,
       payment_status: "Paid",
-      status: "Confirmed",
+      status: "Cooking", // 👈 CHANGED to Cooking so it appears instantly in the kitchen view
       reservation_type: "Dine-in",
       notes: form.notes.trim() || null,
       is_peak_hour: false,
-      estimated_ready_at: eta, // Added so the timer works for walk-ins too!
+      estimated_ready_at: eta,
     }]).select();
 
     setSubmitting(false);
@@ -143,7 +142,6 @@ export default function AdminWalkIn() {
     if (error) {
       alert("Error saving reservation: " + error.message);
     } else {
-      // 👇 Show the auto-generated ID (e.g., WALKIN-105)
       const newId = data[0]?.id;
       setSuccessMsg(`Order #${newId} created successfully!`);
       
@@ -153,7 +151,6 @@ export default function AdminWalkIn() {
         pax: 2, payment_method: "Cash", notes: ""
       });
       
-      // Clear success message after 4 seconds
       setTimeout(() => setSuccessMsg(""), 4000);
     }
   };
